@@ -22,9 +22,9 @@ The system continuously monitors a support email address, uses an AI agent to an
 
 *   **Automation Platform**: n8n
 *   **Email Integration**: Gmail API
-*   **AI Engine**: Google Gemini API (or OpenAI API)
+*   **AI Engine**: Google Gemini API 
 *   **Data Logging**: Airtable
-*   **Notifications**: Slack API
+*   **Notifications**: Slack 
 *   **Data Transformation**: JavaScript
 
 ---
