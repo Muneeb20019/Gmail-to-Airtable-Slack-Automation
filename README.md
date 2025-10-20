@@ -33,9 +33,7 @@ The system continuously monitors a support email address, uses an AI agent to an
 
 The entire system is orchestrated via a single, robust n8n workflow.
 
-![Workflow Diagram](PASTE_YOUR_WORKFLOW_IMAGE_LINK_HERE)
-
-*   **(You must upload a screenshot of your workflow and replace `PASTE_YOUR_WORKFLOW_IMAGE_LINK_HERE` with the link to that image.)**
+![Workflow Diagram](https://github.com/Muneeb20019/Gmail-to-Airtable-Slack-Automation/blob/main/Gmail%20bot.png?raw=true)
 
 ---
 
