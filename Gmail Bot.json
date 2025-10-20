@@ -1,0 +1,525 @@
+{
+  "name": "Gmail Bot",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -64,
+        384
+      ],
+      "typeVersion": 1,
+      "id": "20dc3e68-194b-415b-a787-669a054667bf",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {
+          "labelIds": [
+            "INBOX"
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -416,
+        -64
+      ],
+      "id": "4f134d1d-782c-4c31-8b3c-85367c0914aa",
+      "name": "Watch Support Inbox",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "e36CIXM9ni2KzA0m",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "messageId": "={{ $json.id }}",
+        "simple": false,
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -208,
+        -64
+      ],
+      "id": "17380991-9320-4f47-833b-5f7a54a22b56",
+      "name": "Read Full Email",
+      "webhookId": "6e9a5709-a03a-466f-9518-9008e96fe481",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "e36CIXM9ni2KzA0m",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the messy string output from the Gemini/OpenAI node\nconst messyString = $json.content.parts[0].text; // Adjust this path if using OpenAI\n\n// --- The Cleaning Process ---\n// Remove the markdown code block markers (\"```json\" at the start and \"```\" at the end)\n// This also handles cases where the AI might forget the 'json' part.\nconst cleanString = messyString.replace(/^```(json)?\\n|```$/g, '');\n\n// Parse the cleaned string into a real JSON object\nconst jsonData = JSON.parse(cleanString);\n\n// --- Return the Clean Data ---\n// Return a new item containing only the perfectly structured JSON data\nreturn [{ json: jsonData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        -64
+      ],
+      "id": "0ccb6e44-1014-4a14-93ed-42247a481842",
+      "name": "Clean AI Output"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appZ1PCST2PvGVSu8",
+          "mode": "list",
+          "cachedResultName": "Recruiting System",
+          "cachedResultUrl": "https://airtable.com/appZ1PCST2PvGVSu8"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblpXpkH8LTGHKNMZ",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appZ1PCST2PvGVSu8/tblpXpkH8LTGHKNMZ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sender_name": "={{ $json.sender_name }}",
+            "sender_email": "={{ $json.sender_email }}",
+            "priority": "={{ $json.priority }}",
+            "category": "={{ $json.category }}",
+            "summary": "={{ $json.summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sender_name",
+              "displayName": "sender_name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sender_email",
+              "displayName": "sender_email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        592,
+        -64
+      ],
+      "id": "ccc822c2-6fcb-4632-8615-b0ae90ef8f47",
+      "name": "Log Ticket in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "yO9A89dpPhQrhnsu",
+          "name": "Airtable Personal Access Token account 4"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.fields.priority }}",
+                    "rightValue": "High",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6833c082-fa15-4826-9437-8370a71469fb"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "b4d740fa-0b65-4ea4-9beb-ecf5c00dd59e",
+                    "leftValue": "={{ $json.fields.priority }}",
+                    "rightValue": "Medium",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "fb361f62-4a93-49b0-9d35-d97eebba85ae",
+                    "leftValue": "={{ $json.fields.priority }}",
+                    "rightValue": "Low",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        784,
+        -80
+      ],
+      "id": "bf6f1091-5b3f-4c67-bcc8-1109740c458f",
+      "name": "Route by Priority"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09J981R35L",
+          "mode": "list",
+          "cachedResultName": "social"
+        },
+        "text": "=🚨‼️ *URGENT TICKET* ‼️🚨\n\n*From:* {{ $json.fields.sender_name }}\n*Summary:* {{ $json.fields.summary }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1072,
+        -224
+      ],
+      "id": "5993edc2-00f3-4267-a18a-289154a7e057",
+      "name": "Send HIGH Priority Alert",
+      "webhookId": "e53fe473-c01b-4a2a-8dfe-88d838edc884",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "KgREoF0unDFm9RAm",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09J981R35L",
+          "mode": "list",
+          "cachedResultName": "social"
+        },
+        "text": "=⚠️🟡 *New Medium Priority Ticket* 🟡⚠️\n\n*From:* {{ $json.fields.sender_name }}\n*Summary:* {{ $json.fields.summary }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1072,
+        -16
+      ],
+      "id": "44f2db51-eaca-447c-bff3-f956ebf6dd82",
+      "name": "Send MEDIUM Priority Alert",
+      "webhookId": "e53fe473-c01b-4a2a-8dfe-88d838edc884",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "KgREoF0unDFm9RAm",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09J981R35L",
+          "mode": "list",
+          "cachedResultName": "social"
+        },
+        "text": "=ℹ️🔵 *New Low Priority Ticket* 🔵ℹ️\n\n*From:* {{ $json.fields.sender_name }}\n*Summary:* {{ $json.fields.summary }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1072,
+        208
+      ],
+      "id": "dc052f57-411f-4cdc-ab3e-31628d6e4640",
+      "name": "Send LOW Priority Alert",
+      "webhookId": "e53fe473-c01b-4a2a-8dfe-88d838edc884",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "KgREoF0unDFm9RAm",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-flash-latest",
+          "mode": "list",
+          "cachedResultName": "models/gemini-flash-latest"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert AI Triage Agent for a support team. Your task is to analyze the following email and extract specific information.\n\nRespond ONLY with a single, clean JSON object. Do not include any other text. The JSON object must contain the following keys:\n- \"sender_name\"\n- \"sender_email\"\n- \"priority\"\n- \"category\"\n- \"summary\"\n\n**CRITICAL INSTRUCTIONS:**\n1.  You MUST extract the \"sender_name\" and \"sender_email\" from the \"From\" line provided below.\n2.  Do NOT use the name signed at the end of the email body.\n\n**Priority Rules:**\n- \"Urgent\": System outage, critical bug, angry customer.\n- \"High\": Feature not working, payment issue.\n- \"Normal\": General question.\n\n**Category Rules:**\n- Choose one: \"Billing\", \"Technical Bug\", \"Feature Request\", \"Account Issue\", \"General Inquiry\".\n\nHere is the email to analyze:\nFrom: {{ $('Read Full Email').item.json.from.text }}\nSubject: {{ $json.subject }}\nBody: {{ $json.text }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -64
+      ],
+      "id": "07faac1f-e3de-4b1e-8e0d-29427cdedf2f",
+      "name": "AI Agent",
+      "retryOnFail": true,
+      "credentials": {
+        "googlePalmApi": {
+          "id": "SKHYb9gThBBZz4Sa",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Watch Support Inbox": [
+      {
+        "json": {
+          "id": "199ec39eee893c30",
+          "threadId": "199ec39eee893c30",
+          "snippet": "Hi there, I&#39;m writing to report a persistent &quot;401 Unauthorized&quot; error when trying to connect to your API. I am using the API key directly from my account dashboard and am passing it as a",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 9727,
+          "historyId": "1380429",
+          "internalDate": "1760604830000",
+          "labels": [
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "IMPORTANT",
+              "name": "IMPORTANT"
+            },
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "From": "imran ali khan <engineerchemical26@gmail.com>",
+          "Subject": "Problem with API Connection",
+          "To": "muneebkhan20019@gmail.com"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Watch Support Inbox": {
+      "main": [
+        [
+          {
+            "node": "Read Full Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Full Email": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean AI Output": {
+      "main": [
+        [
+          {
+            "node": "Log Ticket in Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Ticket in Airtable": {
+      "main": [
+        [
+          {
+            "node": "Route by Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Priority": {
+      "main": [
+        [
+          {
+            "node": "Send HIGH Priority Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send MEDIUM Priority Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send LOW Priority Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Clean AI Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "25644358-9e7f-44f5-af1f-77e3f93fbde7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "faa43557ddc6cac93026545787403716d4ebd48fe264f2051dfc912792a94480"
+  },
+  "id": "e5YiZ2clYmYGv9h1",
+  "tags": []
+}
