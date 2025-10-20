@@ -9,12 +9,12 @@ The system continuously monitors a support email address, uses an AI agent to an
 ## Key Features
 
 *   **Real-Time Email Processing**: A **Gmail Trigger** monitors a support inbox in real-time, initiating the workflow the moment a new support request arrives.
-*   **Intelligent AI Triage Agent**: A **Google Gemini** (or OpenAI) node acts as the core "brain." It analyzes the email's subject and body to:
+*   **Intelligent AI Triage Agent**: A **Google Gemini** node acts as the core "brain." It analyzes the email's subject and body to:
     *   Determine the **Priority** (High, Medium, Low) based on custom rules.
     *   Assign a **Category** (e.g., "Technical Bug," "Billing").
     *   Generate a concise, natural-language **Summary** of the user's problem.
 *   **Structured Data Logging**: The workflow takes the structured JSON output from the AI, cleans it, and logs it as a new, perfectly organized record in an **Airtable** base, which acts as the central support ticket dashboard.
-*   **Priority-Based Alerting System**: A **Switch** node intelligently routes the workflow down different paths based on the AI-assigned priority. Each path is connected to a dedicated **Slack** node that sends a customized alert to the support channel, using different emojis and text to signal the urgency of the ticket (e.g., 🚨 for High, ⚠️ for Medium).
+*   **Priority-Based Alerting System**: A **Switch** node intelligently routes the workflow down different paths based on the AI-assigned priority. Each path is connected to a dedicated **Slack** node that sends a customized alert to the support channel and send text to signal the urgency of the ticket (e.g., 🚨 for High, ⚠️ for Medium).
 
 ---
 
