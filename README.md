@@ -38,7 +38,7 @@ This system is engineered to solve the most common bottlenecks in support operat
 ### Workflow Orchestration (AI Support Pipeline)
 The master blueprint of the automation logic—from Gmail ingestion to AI-powered triage and multi-channel routing.
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Muneeb20019/Ticket-Management-AI-System/main/workflow.png" width="100%" alt="n8n Ticket Workflow Architecture" style="border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"/>
+  <img src="https://raw.githubusercontent.com/Muneeb20019/Ticket-Management-AI-System/main/Gmail%20bot.png" width="100%" alt="n8n Ticket Workflow Architecture" style="border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"/>
 </div>
 
 ---
